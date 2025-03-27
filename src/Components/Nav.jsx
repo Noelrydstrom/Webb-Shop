@@ -1,6 +1,6 @@
-// src/Components/Nav.jsx
-import React from 'react';  // Import React
-import '../App.css';  // Import the global App.css file for styling
+import React from 'react';
+import { FaShoppingCart } from 'react-icons/fa'; // Import shopping cart icon
+import '../App.css';
 
 const Nav = () => {
   return (
@@ -11,7 +11,11 @@ const Nav = () => {
         <li><a href="#products">Products</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
-        <li><a href="#shopping-cart">Shopping Cart</a></li>
+        <li>
+          <a href="#shopping-cart">
+            <FaShoppingCart size={50} /> {/* Shopping cart icon */}
+          </a>
+        </li>
       </ul>
     </nav>
   );

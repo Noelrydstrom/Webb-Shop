@@ -11,13 +11,14 @@ function Products() {
     fetch('https://dummyjson.com/products')
       .then((res) => res.json())
       .then((data) => {
+        console.log(data.products); // Log the products to see if the `image` field is there
         setProducts(data.products);
         setLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-        setLoading(false);
-      });
+    })
+    .catch((error) => {
+      setError(error);
+      setLoading(false);
+    });
   }, []);
 
   if (loading) {
@@ -33,10 +34,14 @@ function Products() {
       <h1>Product List</h1>
       <ul>
         {products.map((product) => (
-          <li key={product.id}>
+          <li key={product.id} className="product-item">
+            {/* Product Image */}
+            <img src={product.thumbnail} alt={product.title} className="product-image" />
+
             <h2>{product.name}</h2>
-            <p>{product.description}</p>
-            <p>Price: ${product.price}</p>
+            <p className="product-description">{product.description}</p>
+            <p className="product-price">Price: ${product.price}</p>
+            <p className="Cart">Add</p>
           </li>
         ))}
       </ul>
@@ -45,4 +50,3 @@ function Products() {
 }
 
 export default Products;
-
