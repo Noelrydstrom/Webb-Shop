@@ -1,9 +1,9 @@
-// src/Components/Products.jsx
 import React, { useState, useEffect } from 'react';
-import '../App.css'; // Correct path to App.css
+import '../App.css';
 
 function Products() {
   const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -11,37 +11,49 @@ function Products() {
     fetch('https://dummyjson.com/products')
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.products); // Log the products to see if the `image` field is there
         setProducts(data.products);
         setLoading(false);
-    })
-    .catch((error) => {
-      setError(error);
-      setLoading(false);
-    });
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
+  // 🔍 Product Detail View
+  if (selectedProduct) {
+    return (
+      <div className="product-detail">
+        <button onClick={() => setSelectedProduct(null)} className="back-button">← Back</button>
+        <h1>{selectedProduct.title}</h1>
+        <img src={selectedProduct.thumbnail} alt={selectedProduct.title} className="detail-image" />
+        <p>{selectedProduct.description}</p>
+        <p className="product-price">Price: ${selectedProduct.price}</p>
+      </div>
+    );
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
+  // 🛍 Product List View
   return (
     <div className="product-list">
       <h1>Product List</h1>
       <ul>
         {products.map((product) => (
-          <li key={product.id} className="product-item">
-            {/* Product Image */}
+          <li
+            key={product.id}
+            className="product-item"
+            onClick={() => setSelectedProduct(product)}
+            style={{ cursor: 'pointer' }}
+          >
             <img src={product.thumbnail} alt={product.title} className="product-image" />
-
-            <h2>{product.name}</h2>
+            <h2>{product.title}</h2>
             <p className="product-description">{product.description}</p>
             <p className="product-price">Price: ${product.price}</p>
-            <p className="Cart">Add</p>
+            <input type="number" min="1" defaultValue="1" className="quantity-input" />
+            <button className="add-button">Add</button>
           </li>
         ))}
       </ul>
@@ -50,3 +62,4 @@ function Products() {
 }
 
 export default Products;
+
