@@ -1,11 +1,12 @@
+// Products.jsx
 import React, { useState, useEffect } from 'react';
 import '../App.css';
 
-function Products() {
+function Products({ addToCart }) {
   const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null); // Track the selected product for the modal
 
   useEffect(() => {
     fetch('https://dummyjson.com/products')
@@ -20,23 +21,24 @@ function Products() {
       });
   }, []);
 
+  const openProductDetail = (product, e) => {
+    e.stopPropagation(); // Prevent modal opening when interacting with buttons
+    setSelectedProduct(product); // Set the selected product for the modal
+  };
+
+  const closeProductDetail = () => {
+    setSelectedProduct(null); // Close the modal
+  };
+
+  const handleAddToCart = (product, e) => {
+    e.stopPropagation(); // Prevent the modal from opening when adding to cart
+    const quantity = 1; // Always add 1 item from homepage
+    addToCart(product, quantity);
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  // 🔍 Product Detail View
-  if (selectedProduct) {
-    return (
-      <div className="product-detail">
-        <button onClick={() => setSelectedProduct(null)} className="back-button">← Back</button>
-        <h1>{selectedProduct.title}</h1>
-        <img src={selectedProduct.thumbnail} alt={selectedProduct.title} className="detail-image" />
-        <p>{selectedProduct.description}</p>
-        <p className="product-price">Price: ${selectedProduct.price}</p>
-      </div>
-    );
-  }
-
-  // 🛍 Product List View
   return (
     <div className="product-list">
       <h1>Product List</h1>
@@ -45,21 +47,46 @@ function Products() {
           <li
             key={product.id}
             className="product-item"
-            onClick={() => setSelectedProduct(product)}
-            style={{ cursor: 'pointer' }}
+            onClick={(e) => openProductDetail(product, e)} // Open product detail modal
           >
-            <img src={product.thumbnail} alt={product.title} className="product-image" />
+            <img
+              src={product.thumbnail}
+              alt={product.title}
+              className="product-image"
+            />
             <h2>{product.title}</h2>
             <p className="product-description">{product.description}</p>
             <p className="product-price">Price: ${product.price}</p>
-            <input type="number" min="1" defaultValue="1" className="quantity-input" />
-            <button className="add-button">Add</button>
+            <button
+              className="add-button"
+              onClick={(e) => handleAddToCart(product, e)}
+            >
+              Add to Cart
+            </button>
           </li>
         ))}
       </ul>
+
+      {/* Product Detail Modal */}
+      {selectedProduct && (
+        <div className="product-modal">
+          <div className="product-modal-content">
+            <button className="close-modal" onClick={closeProductDetail}>
+              &times;
+            </button>
+            <img
+              src={selectedProduct.image || selectedProduct.thumbnail}
+              alt={selectedProduct.title}
+              className="large-product-image"
+            />
+            <h2>{selectedProduct.title}</h2>
+            <p className="description">{selectedProduct.description}</p>
+            <p className="price"><strong>Price:</strong> ${selectedProduct.price}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 export default Products;
-
