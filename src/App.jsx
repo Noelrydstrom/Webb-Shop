@@ -65,9 +65,9 @@ function App() {
       )}
 
       <Routes>
-        <Route path="/products" element={<Products addToCart={addToCart} />} />
-        {/* Set the default route to show Products */}
         <Route path="/" element={<Products addToCart={addToCart} />} />
+        <Route path="/products" element={<Products addToCart={addToCart} />} />
+        <Route path="/products/:id?" element={<Products addToCart={addToCart} />} />
       </Routes>
     </Router>
   );
