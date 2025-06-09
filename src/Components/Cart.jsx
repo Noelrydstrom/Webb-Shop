@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { CartContext } from '../contexts/CartContext';
 
-function Cart({ cart, closeCart, removeFromCart, updateCart }) {
+function Cart({ closeCart }) {
+  const { cart, removeFromCart, updateCart } = useContext(CartContext);
+
   const [shippingInfo, setShippingInfo] = useState({
     firstName: '',
     lastName: '',

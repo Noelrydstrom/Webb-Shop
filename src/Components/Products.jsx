@@ -1,12 +1,16 @@
 // Products.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import '../App.css';
+import { CartContext } from '../contexts/CartContext';
 
-function Products({ addToCart }) {
+function Products() {
+  const { addToCart } = useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null); // Track the selected product for the modal
+
+  
 
   useEffect(() => {
     fetch('https://dummyjson.com/products')

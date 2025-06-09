@@ -13,7 +13,7 @@ const Nav = () => {
         <li><a href="#contact">Contact</a></li>
         <li>
           <a href="#shopping-cart">
-            <FaShoppingCart size={50} /> {/* Shopping cart icon */}
+            <FaShoppingCart size={50} />
           </a>
         </li>
       </ul>
